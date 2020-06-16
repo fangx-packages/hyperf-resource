@@ -1,0 +1,62 @@
+{
+    "name": "fangx/resource",
+    "description": "A api resource component for hyperf.",
+    "type": "library",
+    "license": "MIT",
+    "keywords": [
+      "php",
+      "hyperf",
+      "resource"
+    ],
+    "authors": [
+        {
+            "name": "nfangxu",
+            "email": "nfangxu@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.2",
+        "ext-json": "*",
+        "hyperf/command": "~1.1.0",
+        "hyperf/devtool": "~1.1.0",
+        "hyperf/http-message": "^1.1",
+        "hyperf/paginator": "^1.1",
+        "hyperf/utils": "~1.1.0",
+        "psr/container": "^1.0"
+    },
+    "require-dev": {
+        "hyperf/database": "~1.1.0",
+        "hyperf/http-server": "~1.1.0",
+        "hyperf/grpc-server": "~1.1.0",
+        "friendsofphp/php-cs-fixer": "v2.16.1",
+        "mockery/mockery": "^1.0",
+        "doctrine/common": "^2.9",
+        "phpunit/phpunit": "^7.0",
+        "phpstan/phpstan": "^0.11.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Fangx\\Resource\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Fangx\\Tests\\": "tests/"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "hyperf": {
+            "config": "Fangx\\Resource\\ConfigProvider"
+        }
+    },
+    "bin": [
+    ],
+    "scripts": {
+        "cs-fix": "php-cs-fixer fix $1",
+        "test": "phpunit --colors=always -c phpunit.xml",
+        "analyse": "phpstan analyse --memory-limit 300M -l 0 -c phpstan.neon ./src ./tests"
+    }
+}
