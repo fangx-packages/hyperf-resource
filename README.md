@@ -867,7 +867,7 @@ class IndexController extends AbstractController
 
 ## 响应资源
 
-就像你知道的那样， 资源可以直接在控制器中被返回：
+就像你知道的那样，资源可以直接在控制器中被返回：
 
 ```php
 <?php
@@ -886,3 +886,9 @@ class IndexController extends AbstractController
 }
 
 ```
+
+如你想设置响应头信息, 状态码等, 通过调用 `toResponse()` 方法获取到响应对象进行设置.
+
+## 注意
+
+**因 hyperf 原因, 目前无法自动调用 `toResponse()` 方法. 该问题会导致无法添加任何包裹信息到响应JSON中.**
