@@ -859,7 +859,8 @@ class IndexController extends AbstractController
         return (new UserCollection(User::all()->load('roles')))
             ->additional(['meta' => [
                 'key' => 'value',
-            ]]);    }
+            ]]);    
+    }
 }
 
 ```
