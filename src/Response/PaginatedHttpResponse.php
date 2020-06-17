@@ -13,20 +13,25 @@ declare(strict_types=1);
 
 namespace Fangx\Resource\Response;
 
+use Hyperf\HttpMessage\Stream\SwooleStream;
 use Hyperf\Utils\Arr;
+use Hyperf\Utils\Codec\Json;
 
 class PaginatedHttpResponse extends HttpResponse
 {
     public function toResponse()
     {
-        return $this->wrap(
-            $this->resource->resolve(),
-            array_merge_recursive(
-                $this->paginationInformation(),
-                $this->resource->with(),
-                $this->resource->additional
-            )
-        );
+        return $this->response()
+            ->withStatus($this->calculateStatus())
+            ->withAddedHeader('content-type', 'application/json; charset=utf-8')
+            ->withBody(new SwooleStream(Json::encode($this->wrap(
+                $this->resource->resolve(),
+                array_merge_recursive(
+                    $this->paginationInformation(),
+                    $this->resource->with(),
+                    $this->resource->additional
+                )
+            ))));
     }
 
     /**

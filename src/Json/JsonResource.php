@@ -17,6 +17,7 @@ use ArrayAccess;
 use Fangx\Resource\Concerns\ConditionallyLoadsAttributes;
 use Fangx\Resource\Concerns\DelegatesToResource;
 use Fangx\Resource\JsonEncodingException;
+use Fangx\Resource\Response\HttpResponse;
 use Hyperf\Utils\Contracts\Arrayable;
 use Hyperf\Utils\Contracts\Jsonable;
 use JsonSerializable;
@@ -195,5 +196,10 @@ class JsonResource implements ArrayAccess, JsonSerializable, Arrayable, Jsonable
     public function jsonSerialize()
     {
         return $this->resolve();
+    }
+
+    public function toResponse()
+    {
+        return (new HttpResponse($this))->toResponse();
     }
 }

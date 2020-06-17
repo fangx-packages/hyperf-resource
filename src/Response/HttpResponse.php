@@ -13,9 +13,14 @@ declare(strict_types=1);
 
 namespace Fangx\Resource\Response;
 
+use Hyperf\Database\Model\Model;
+use Hyperf\HttpMessage\Stream\SwooleStream;
+use Psr\Http\Message\ResponseInterface;
+use Hyperf\Utils\Codec\Json;
 use Hyperf\Utils\Collection;
+use Hyperf\Utils\Context;
 
-class HttpResponse extends \Hyperf\HttpMessage\Base\Response
+class HttpResponse
 {
     /**
      * The underlying resource.
@@ -36,11 +41,14 @@ class HttpResponse extends \Hyperf\HttpMessage\Base\Response
 
     public function toResponse()
     {
-        return $this->wrap(
-            $this->resource->resolve(),
-            $this->resource->with(),
-            $this->resource->additional
-        );
+        return $this->response()
+            ->withStatus($this->calculateStatus())
+            ->withAddedHeader('content-type', 'application/json; charset=utf-8')
+            ->withBody(new SwooleStream(Json::encode($this->wrap(
+                $this->resource->resolve(),
+                $this->resource->with(),
+                $this->resource->additional
+            ))));
     }
 
     /**
@@ -74,7 +82,7 @@ class HttpResponse extends \Hyperf\HttpMessage\Base\Response
      */
     protected function haveDefaultWrapperAndDataIsUnwrapped($data)
     {
-        return $this->wrapper() && ! array_key_exists($this->wrapper(), $data);
+        return $this->wrapper() && !array_key_exists($this->wrapper(), $data);
     }
 
     /**
@@ -87,9 +95,9 @@ class HttpResponse extends \Hyperf\HttpMessage\Base\Response
      */
     protected function haveAdditionalInformationAndDataIsUnwrapped($data, $with, $additional)
     {
-        return (! empty($with) || ! empty($additional)) &&
-            (! $this->wrapper() ||
-                ! array_key_exists($this->wrapper(), $data));
+        return (!empty($with) || !empty($additional)) &&
+            (!$this->wrapper() ||
+                !array_key_exists($this->wrapper(), $data));
     }
 
     /**
@@ -100,5 +108,16 @@ class HttpResponse extends \Hyperf\HttpMessage\Base\Response
     protected function wrapper()
     {
         return $this->resource->wrap;
+    }
+
+    protected function calculateStatus()
+    {
+        return $this->resource->resource instanceof Model &&
+        $this->resource->resource->wasRecentlyCreated ? 201 : 200;
+    }
+
+    protected function response(): ResponseInterface
+    {
+        return Context::get(ResponseInterface::class);
     }
 }

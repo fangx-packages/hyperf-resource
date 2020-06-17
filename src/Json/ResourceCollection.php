@@ -15,6 +15,7 @@ namespace Fangx\Resource\Json;
 
 use Countable;
 use Fangx\Resource\Concerns\CollectsResources;
+use Fangx\Resource\Response\PaginatedHttpResponse;
 use Hyperf\Utils\Collection;
 use IteratorAggregate;
 
@@ -60,11 +61,18 @@ class ResourceCollection extends JsonResource implements Countable, IteratorAggr
 
     /**
      * Transform the resource into a JSON array.
-     *
-     * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         return $this->collection->map->toArray()->all();
+    }
+
+    public function toResponse()
+    {
+        if ($this->isPaginatorResource($this->resource)) {
+            return (new PaginatedHttpResponse($this))->toResponse();
+        }
+
+        return parent::toResponse();
     }
 }
