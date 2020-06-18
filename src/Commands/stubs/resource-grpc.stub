@@ -15,14 +15,4 @@ class %CLASS% extends JsonResource
     {
         return parent::toArray();
     }
-
-    /**
-     * The grpc message for the resource.
-     *
-     * @return string
-     */
-    public function except(): string
-    {
-        return '';
-    }
 }

@@ -1,4 +1,4 @@
-# API 资源
+# API 资源 - 支持设置 Grpc 响应
 
 ## 简介
 
@@ -44,7 +44,7 @@ class User extends JsonResource
      *
      * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         return [
             'id' => $this->id,
@@ -70,7 +70,7 @@ class IndexController extends AbstractController
 {
     public function index()
     {
-        return new UserResource(User::first());
+        return (new UserResource(User::first()))->toResponse();
     }
 }
 
@@ -91,7 +91,7 @@ class IndexController extends AbstractController
 {
     public function index()
     {
-        return UserResource::collection(User::all());
+        return UserResource::collection(User::all())->toResponse();
     }
 }
 
@@ -119,7 +119,7 @@ class UserCollection extends ResourceCollection
      *
      * @return array
      */
-    public function toArray()
+    public function toArray() :array
     {
         return [
             'data' => $this->collection,
@@ -145,7 +145,7 @@ class IndexController extends AbstractController
 {
     public function index()
     {
-        return new UserCollection(User::all());
+        return (new UserCollection(User::all()))->toResponse();
     }
 }
 
@@ -176,7 +176,7 @@ class User extends JsonResource
      *
      * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         return [
             'id' => $this->id,
@@ -202,7 +202,7 @@ class IndexController extends AbstractController
 {
     public function index()
     {
-        return UserResource::collection(User::all()->keyBy->id);
+        return UserResource::collection(User::all()->keyBy->id)->toResponse();
     }
 }
 
@@ -235,7 +235,7 @@ class UserCollection extends ResourceCollection
      *
      * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         return [
             'data' => $this->collection,
@@ -268,7 +268,7 @@ class User extends JsonResource
      *
      * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         return [
             'id' => $this->id,
@@ -294,7 +294,7 @@ class IndexController extends AbstractController
 {
     public function index()
     {
-        return new UserResource(User::find(1));
+        return (new UserResource(User::find(1)))->toResponse();
     }
 }
 
@@ -317,7 +317,7 @@ class User extends JsonResource
      *
      * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         return [
             'id' => $this->id,
@@ -347,7 +347,7 @@ class IndexController extends AbstractController
 {
     public function index()
     {
-        return UserResource::collection(User::all());
+        return UserResource::collection(User::all())->toResponse();
     }
 }
 
@@ -369,7 +369,7 @@ class UserCollection extends ResourceCollection
      *
      * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         return [
             'data' => $this->collection,
@@ -395,7 +395,7 @@ class IndexController extends AbstractController
 {
     public function index()
     {
-        return new UserCollection(User::all());
+        return (new UserCollection(User::all()))->toResponse();
     }
 }
 
@@ -437,7 +437,7 @@ class IndexController extends AbstractController
 {
     public function index()
     {
-        return (new UserCollection(User::all()))->withoutWrapping();
+        return (new UserCollection(User::all()))->withoutWrapping()->toResponse();
     }
 }
 
@@ -465,7 +465,7 @@ class UserCollection extends ResourceCollection
      *
      * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         return [
             'data' => $this->collection,
@@ -528,7 +528,7 @@ class IndexController extends AbstractController
 {
     public function index()
     {
-        return new UserCollection(User::paginate());
+        return (new UserCollection(User::paginate()))->toResponse();
     }
 }
 ```
@@ -586,7 +586,7 @@ class User extends JsonResource
      *
      * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         return [
             'id' => $this->id,
@@ -617,7 +617,7 @@ class User extends JsonResource
      *
      * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         return [
             'id' => $this->id,
@@ -650,7 +650,7 @@ class User extends JsonResource
      *
      * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         return [
             'id' => $this->id,
@@ -690,7 +690,7 @@ class User extends JsonResource
      *
      * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         return [
             'id' => $this->id,
@@ -723,7 +723,7 @@ class User extends JsonResource
      *
      * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         return [
             'id' => $this->id,
@@ -753,7 +753,7 @@ class User extends JsonResource
      *
      * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         return [
             'id' => $this->id,
@@ -785,7 +785,7 @@ class UserCollection extends ResourceCollection
      *
      * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         return [
             'data' => $this->collection,
@@ -818,7 +818,7 @@ class UserCollection extends ResourceCollection
      *
      * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         return [
             'data' => $this->collection,
@@ -859,7 +859,7 @@ class IndexController extends AbstractController
         return (new UserCollection(User::all()->load('roles')))
             ->additional(['meta' => [
                 'key' => 'value',
-            ]]);    
+            ]])->toResponse();    
     }
 }
 
@@ -881,7 +881,7 @@ class IndexController extends AbstractController
 {
     public function index()
     {
-        return new UserResource(User::find(1));
+        return (new UserResource(User::find(1)))->toResponse();
     }
 }
 

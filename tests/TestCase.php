@@ -11,7 +11,8 @@ use Hyperf\Di\MethodDefinitionCollector;
 use Hyperf\Di\MethodDefinitionCollectorInterface;
 use Hyperf\HttpMessage\Server\Response;
 use Hyperf\HttpServer\Contract\RequestInterface;
-use Hyperf\HttpServer\CoreMiddleware;
+use Hyperf\HttpServer\CoreMiddleware as HttpServerCore;
+use Fangx\Tests\Stubs\GrpcCoreMiddlewareProxy as GrpcServerCore;
 use Hyperf\HttpServer\Router\Dispatched;
 use Hyperf\HttpServer\Router\DispatcherFactory;
 use Hyperf\HttpServer\Router\Handler;
@@ -20,6 +21,7 @@ use Hyperf\Utils\Serializer\SimpleNormalizer;
 use Mockery;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ResponseInterface as PsrResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
@@ -29,6 +31,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
     {
         Context::set(RequestInterface::class, null);
         Context::set(ResponseInterface::class, null);
+        Mockery::close();
     }
 
     protected function setUp()
@@ -65,9 +68,13 @@ class TestCase extends \PHPUnit\Framework\TestCase
         return $container;
     }
 
-    public function http(callable $except)
+    /**
+     * @param array|callable|string $except
+     * @return HttpResponse
+     */
+    public function http($except)
     {
-        $core = new CoreMiddleware($container = $this->container(), 'http');
+        $core = new HttpServerCore($container = $this->container(), 'http');
 
         $handle = Mockery::mock(RequestHandlerInterface::class);
 
@@ -82,5 +89,28 @@ class TestCase extends \PHPUnit\Framework\TestCase
             ])]);
 
         return HttpResponse::fromBaseResponse($core->process($request, $handle));
+    }
+
+    /**
+     * @param array|callable|string $except
+     * @return PsrResponseInterface
+     */
+    public function grpc($except)
+    {
+        $core = new GrpcServerCore($container = $this->container(), 'grpc');
+
+        $handle = Mockery::mock(RequestHandlerInterface::class);
+
+        $request = Mockery::mock(ServerRequestInterface::class);
+
+        $request->shouldReceive(...['getAttribute'])
+            ->with(...[Dispatched::class])
+            ->andReturn(...[new Dispatched([
+                Dispatcher::FOUND,
+                new Handler($except, '*'),
+                []
+            ])]);
+
+        return $core->process($request, $handle);
     }
 }

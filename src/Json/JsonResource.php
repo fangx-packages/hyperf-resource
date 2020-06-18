@@ -109,8 +109,6 @@ class JsonResource implements ArrayAccess, JsonSerializable, Arrayable, Jsonable
 
         if ($data instanceof Arrayable) {
             $data = $data->toArray();
-        } elseif ($data instanceof JsonSerializable) {
-            $data = $data->jsonSerialize();
         }
 
         return $this->filter((array)$data);
@@ -134,8 +132,8 @@ class JsonResource implements ArrayAccess, JsonSerializable, Arrayable, Jsonable
      * Convert the model instance to JSON.
      *
      * @param int $options
-     * @throws JsonEncodingException
      * @return string
+     * @throws JsonEncodingException
      */
     public function toJson($options = 0)
     {
