@@ -32,8 +32,8 @@ class GenResourceCommand extends GeneratorCommand
     {
         parent::configure();
         $this->setDescription('create a new resource');
-        $this->addOption('collection', 'c', InputOption::VALUE_OPTIONAL, 'Create a resource collection');
-        $this->addOption('grpc', null, InputOption::VALUE_OPTIONAL, 'Create a resource collection');
+        $this->addOption('collection', 'c', InputOption::VALUE_NONE, 'Create a resource collection');
+        $this->addOption('grpc', null, InputOption::VALUE_NONE, 'Create a resource collection');
     }
 
     protected function getStub(): string

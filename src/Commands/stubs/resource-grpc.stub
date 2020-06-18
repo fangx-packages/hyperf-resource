@@ -2,9 +2,9 @@
 
 namespace %NAMESPACE%;
 
-use Fangx\Resource\Json\JsonResource;
+use Fangx\Resource\Grpc\GrpcResource;
 
-class %CLASS% extends JsonResource
+class %CLASS% extends GrpcResource
 {
     /**
      * Transform the resource into an array.
@@ -14,5 +14,15 @@ class %CLASS% extends JsonResource
     public function toArray(): array
     {
         return parent::toArray();
+    }
+
+    /**
+     * The grpc message for the resource.
+     *
+     * @return string
+     */
+    public function expect(): string
+    {
+        // TODO: Implement expect() method.
     }
 }
