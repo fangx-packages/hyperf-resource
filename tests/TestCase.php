@@ -1,8 +1,19 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * Fangx's Packages
+ *
+ * @link     https://github.com/fangx-packages/hyperf-resource
+ * @document https://github.com/fangx-packages/hyperf-resource/blob/master/README.md
+ * @contact  nfangxu@gmail.com
+ * @author   nfangxu
+ */
 
 namespace Fangx\Tests;
 
+use Fangx\Tests\Stubs\GrpcCoreMiddlewareProxy as GrpcServerCore;
 use FastRoute\Dispatcher;
 use Hyperf\Contract\NormalizerInterface;
 use Hyperf\Di\ClosureDefinitionCollector;
@@ -12,7 +23,6 @@ use Hyperf\Di\MethodDefinitionCollectorInterface;
 use Hyperf\HttpMessage\Server\Response;
 use Hyperf\HttpServer\Contract\RequestInterface;
 use Hyperf\HttpServer\CoreMiddleware as HttpServerCore;
-use Fangx\Tests\Stubs\GrpcCoreMiddlewareProxy as GrpcServerCore;
 use Hyperf\HttpServer\Router\Dispatched;
 use Hyperf\HttpServer\Router\DispatcherFactory;
 use Hyperf\HttpServer\Router\Handler;
@@ -25,18 +35,22 @@ use Psr\Http\Message\ResponseInterface as PsrResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 class TestCase extends \PHPUnit\Framework\TestCase
 {
+    protected function setUp()
+    {
+        Context::set(ResponseInterface::class, new Response());
+    }
+
     protected function tearDown()
     {
         Context::set(RequestInterface::class, null);
         Context::set(ResponseInterface::class, null);
         Mockery::close();
-    }
-
-    protected function setUp()
-    {
-        Context::set(ResponseInterface::class, new Response());
     }
 
     public function container()
@@ -85,7 +99,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
             ->andReturn(...[new Dispatched([
                 Dispatcher::FOUND,
                 new Handler($except, '*'),
-                []
+                [],
             ])]);
 
         return HttpResponse::fromBaseResponse($core->process($request, $handle));
@@ -108,7 +122,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
             ->andReturn(...[new Dispatched([
                 Dispatcher::FOUND,
                 new Handler($except, '*'),
-                []
+                [],
             ])]);
 
         return $core->process($request, $handle);

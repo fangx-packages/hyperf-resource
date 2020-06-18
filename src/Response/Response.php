@@ -16,10 +16,10 @@ namespace Fangx\Resource\Response;
 use Fangx\Resource\MessageResource;
 use Hyperf\Database\Model\Model;
 use Hyperf\HttpMessage\Stream\SwooleStream;
-use Psr\Http\Message\ResponseInterface;
 use Hyperf\Utils\Codec\Json;
 use Hyperf\Utils\Collection;
 use Hyperf\Utils\Context;
+use Psr\Http\Message\ResponseInterface;
 
 class Response
 {
@@ -112,7 +112,7 @@ class Response
      */
     protected function haveDefaultWrapperAndDataIsUnwrapped($data)
     {
-        return $this->wrapper() && !array_key_exists($this->wrapper(), $data);
+        return $this->wrapper() && ! array_key_exists($this->wrapper(), $data);
     }
 
     /**
@@ -125,9 +125,9 @@ class Response
      */
     protected function haveAdditionalInformationAndDataIsUnwrapped($data, $with, $additional)
     {
-        return (!empty($with) || !empty($additional)) &&
-            (!$this->wrapper() ||
-                !array_key_exists($this->wrapper(), $data));
+        return (! empty($with) || ! empty($additional)) &&
+            (! $this->wrapper() ||
+                ! array_key_exists($this->wrapper(), $data));
     }
 
     /**

@@ -132,8 +132,8 @@ class JsonResource implements ArrayAccess, JsonSerializable, Arrayable, Jsonable
      * Convert the model instance to JSON.
      *
      * @param int $options
-     * @return string
      * @throws JsonEncodingException
+     * @return string
      */
     public function toJson($options = 0)
     {

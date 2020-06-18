@@ -180,7 +180,7 @@ trait ConditionallyLoadsAttributes
             $default = new MissingValue();
         }
 
-        if (!$this->resource->relationLoaded($relationship)) {
+        if (! $this->resource->relationLoaded($relationship)) {
             return value($default);
         }
 
@@ -240,7 +240,7 @@ trait ConditionallyLoadsAttributes
      */
     protected function transform($value, callable $callback, $default = null)
     {
-        if (!$this->blank($value)) {
+        if (! $this->blank($value)) {
             return $callback($value);
         }
 

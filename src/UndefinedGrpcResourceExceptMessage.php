@@ -1,5 +1,15 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * Fangx's Packages
+ *
+ * @link     https://github.com/fangx-packages/hyperf-resource
+ * @document https://github.com/fangx-packages/hyperf-resource/blob/master/README.md
+ * @contact  nfangxu@gmail.com
+ * @author   nfangxu
+ */
 
 namespace Fangx\Resource;
 
@@ -13,7 +23,7 @@ class UndefinedGrpcResourceExceptMessage extends \Exception
     {
         $this->resource = $resource;
 
-        $message = sprintf("You must override except() and return the message class that for this resource in class [%s].", get_class($resource));
+        $message = sprintf('You must override except() and return the message class that for this resource in class [%s].', get_class($resource));
 
         parent::__construct($message, 500);
     }

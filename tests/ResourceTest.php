@@ -54,7 +54,7 @@ class ResourceTest extends TestCase
                 'id' => 5,
                 'title' => 'Test Title',
                 'custom' => true,
-            ]
+            ],
         ]);
     }
 

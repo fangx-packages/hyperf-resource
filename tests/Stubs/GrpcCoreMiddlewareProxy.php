@@ -1,5 +1,15 @@
 <?php
+
 declare(strict_types=1);
+
+/**
+ * Fangx's Packages
+ *
+ * @link     https://github.com/fangx-packages/hyperf-resource
+ * @document https://github.com/fangx-packages/hyperf-resource/blob/master/README.md
+ * @contact  nfangxu@gmail.com
+ * @author   nfangxu
+ */
 
 namespace Fangx\Tests\Stubs;
 
@@ -23,7 +33,7 @@ class GrpcCoreMiddlewareProxy extends CoreMiddleware
         /** @var Dispatched $dispatched */
         $dispatched = $request->getAttribute(Dispatched::class);
 
-        if (!$dispatched instanceof Dispatched) {
+        if (! $dispatched instanceof Dispatched) {
             throw new ServerException(sprintf('The dispatched object is not a %s object.', Dispatched::class));
         }
 
@@ -43,7 +53,7 @@ class GrpcCoreMiddlewareProxy extends CoreMiddleware
         } else {
             [$controller, $action] = $this->prepareHandler($dispatched->handler->callback);
             $controllerInstance = $this->container->get($controller);
-            if (!method_exists($controller, $action)) {
+            if (! method_exists($controller, $action)) {
                 $grpcMessage = 'Action not exist.';
                 return $this->handleResponse(null, 500, '500', $grpcMessage);
             }
@@ -51,7 +61,7 @@ class GrpcCoreMiddlewareProxy extends CoreMiddleware
             $result = $controllerInstance->{$action}(...$parameters);
         }
 
-        if (!$result instanceof Message) {
+        if (! $result instanceof Message) {
             $grpcMessage = 'The result is not a valid message.';
             return $this->handleResponse(null, 500, '500', $grpcMessage);
         }
