@@ -1,4 +1,4 @@
-# API 资源 - 支持设置 Grpc 响应
+# API 资源 - 支持返回 Grpc 响应的资源扩展
 
 ## 简介
 
@@ -12,7 +12,7 @@
 php bin/hyperf.php gen:resource User
 ```
 
-#### 资源集合
+### 资源集合
 
 除了生成资源转换单个模型外，你还可以生成资源集合用来转换模型的集合。这允许你在响应中包含与给定资源相关的链接与其他元信息。
 
@@ -23,6 +23,45 @@ php bin/hyperf.php gen:resource Users --collection
 
 php bin/hyperf.php gen:resource UserCollection
 ```
+
+### Grpc 资源
+
+支持转化Grpc资源. 
+
+```bash
+php bin/hyperf.php gen:resource User --grpc
+```
+
+Grpc 资源需要设置 `message` 类. 通过重写该资源类的 `expect()` 方法来实现.
+
+Grpc 服务返回时, 必须调用 `toMessage()`. 该方法会返回一个实例化的 `message` 类.
+
+```php
+<?php
+namespace Fangx\Tests\Stubs\Resources;
+
+use Fangx\Resource\Grpc\GrpcResource;
+use Grpc\HiReply;
+
+class HiReplyResource extends GrpcResource
+{
+    public function toArray(): array
+    {
+        return [
+            'message' => $this->message,
+            'user' => HiUserResource::make($this->user),
+        ];
+    }
+
+    public function expect(): string
+    {
+        return HiReply::class;
+    }
+}
+
+```
+
+默认生成的资源集合, 可通过实现 `Fangx\Resource\MessageResource` 接口来使其支持 Grpc 返回.
 
 ## 概念综述
 
