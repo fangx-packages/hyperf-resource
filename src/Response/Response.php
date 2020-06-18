@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Fangx\Resource\Response;
 
+use Fangx\Resource\MessageResource;
 use Hyperf\Database\Model\Model;
 use Hyperf\HttpMessage\Stream\SwooleStream;
 use Psr\Http\Message\ResponseInterface;
@@ -20,7 +21,7 @@ use Hyperf\Utils\Codec\Json;
 use Hyperf\Utils\Collection;
 use Hyperf\Utils\Context;
 
-class HttpResponse
+class Response
 {
     /**
      * The underlying resource.
@@ -49,6 +50,35 @@ class HttpResponse
                 $this->resource->with(),
                 $this->resource->additional
             ))));
+    }
+
+    public function toMessage(MessageResource $resource = null)
+    {
+        if (is_null($resource)) {
+            $resource = $this->resource;
+        }
+
+        $data = $resource->resolve();
+
+        if ($data instanceof Collection) {
+            $data = $data->all();
+        }
+
+        $wrap = array_merge_recursive($data, $resource->with(), $resource->additional);
+
+        foreach ($wrap as $key => $value) {
+            if ($value instanceof MessageResource) {
+                if (is_null($value->resource)) {
+                    unset($wrap[$key]);
+                } else {
+                    $wrap[$key] = $this->toMessage($value);
+                }
+            }
+        }
+
+        $except = $resource->expect();
+
+        return new $except($wrap);
     }
 
     /**

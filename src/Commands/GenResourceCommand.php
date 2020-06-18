@@ -33,13 +33,16 @@ class GenResourceCommand extends GeneratorCommand
         parent::configure();
         $this->setDescription('create a new resource');
         $this->addOption('collection', 'c', InputOption::VALUE_OPTIONAL, 'Create a resource collection');
+        $this->addOption('grpc', null, InputOption::VALUE_OPTIONAL, 'Create a resource collection');
     }
 
     protected function getStub(): string
     {
-        return $this->isCollection()
-            ? __DIR__ . '/stubs/resource-collection.stub'
-            : __DIR__ . '/stubs/resource.stub';
+        return $this->isGrpc()
+            ? __DIR__ . '/stubs/resource-grpc.stub'
+            : ($this->isCollection()
+                ? __DIR__ . '/stubs/resource-collection.stub'
+                : __DIR__ . '/stubs/resource.stub');
     }
 
     protected function getDefaultNamespace(): string
@@ -51,5 +54,10 @@ class GenResourceCommand extends GeneratorCommand
     {
         return $this->input->getOption('collection') ||
             Str::endsWith($this->input->getArgument('name'), 'Collection');
+    }
+
+    protected function isGrpc()
+    {
+        return $this->input->getOption('grpc');
     }
 }

@@ -17,7 +17,7 @@ use ArrayAccess;
 use Fangx\Resource\Concerns\ConditionallyLoadsAttributes;
 use Fangx\Resource\Concerns\DelegatesToResource;
 use Fangx\Resource\JsonEncodingException;
-use Fangx\Resource\Response\HttpResponse;
+use Fangx\Resource\Response\Response;
 use Hyperf\Utils\Contracts\Arrayable;
 use Hyperf\Utils\Contracts\Jsonable;
 use JsonSerializable;
@@ -109,8 +109,6 @@ class JsonResource implements ArrayAccess, JsonSerializable, Arrayable, Jsonable
 
         if ($data instanceof Arrayable) {
             $data = $data->toArray();
-        } elseif ($data instanceof JsonSerializable) {
-            $data = $data->jsonSerialize();
         }
 
         return $this->filter((array)$data);
@@ -134,8 +132,8 @@ class JsonResource implements ArrayAccess, JsonSerializable, Arrayable, Jsonable
      * Convert the model instance to JSON.
      *
      * @param int $options
-     * @throws JsonEncodingException
      * @return string
+     * @throws JsonEncodingException
      */
     public function toJson($options = 0)
     {
@@ -200,6 +198,11 @@ class JsonResource implements ArrayAccess, JsonSerializable, Arrayable, Jsonable
 
     public function toResponse()
     {
-        return (new HttpResponse($this))->toResponse();
+        return (new Response($this))->toResponse();
+    }
+
+    public function toMessage()
+    {
+        return (new Response($this))->toMessage();
     }
 }

@@ -17,7 +17,7 @@ use Hyperf\HttpMessage\Stream\SwooleStream;
 use Hyperf\Utils\Arr;
 use Hyperf\Utils\Codec\Json;
 
-class PaginatedHttpResponse extends HttpResponse
+class PaginatedResponse extends Response
 {
     public function toResponse()
     {

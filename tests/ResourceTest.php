@@ -41,11 +41,6 @@ use Hyperf\Utils\Collection;
  */
 class ResourceTest extends TestCase
 {
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-    }
-
     public function testResourcesMayBeConvertedToJson()
     {
         $this->http(function () {
