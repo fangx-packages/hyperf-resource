@@ -23,10 +23,9 @@ use Grpc\HiUser;
  */
 class GrpcResourceTest extends TestCase
 {
-    public function testToResponse()
+    public function testResourceToMessage()
     {
-        /** @var HiReply $response */
-        $response = HiReplyResource::make(new class() {
+        $msg = HiReplyResource::make(new class() {
             public $message;
 
             public $user;
@@ -42,7 +41,54 @@ class GrpcResourceTest extends TestCase
             }
         })->toMessage();
 
-        $this->assertSame(HiReply::class, get_class($response));
-        $this->assertSame(HiUser::class, get_class($response->getUser()));
+        $this->assertSame(HiReply::class, get_class($msg));
+        $this->assertSame(HiUser::class, get_class($msg->getUser()));
+    }
+
+    public function testCollectionToMessage()
+    {
+        $collection = collect([
+            new class() {
+                public $message;
+
+                public $user;
+
+                public function __construct()
+                {
+                    $this->message = 'foo';
+                    $this->user = new class() {
+                        public $name = 'foo name';
+
+                        public $sex = 1;
+                    };
+                }
+            },
+            new class() {
+                public $message;
+
+                public $user;
+
+                public function __construct()
+                {
+                    $this->message = 'bar';
+                    $this->user = new class() {
+                        public $name = 'bar name';
+
+                        public $sex = 2;
+                    };
+                }
+            },
+        ]);
+
+        $msg = HiReplyResource::collection($collection)->toMessage();
+
+        $this->assertTrue(is_array($msg));
+
+        $this->assertCount(2, $msg);
+
+        foreach ($msg as $value) {
+            $this->assertSame(HiReply::class, get_class($value));
+            $this->assertSame(HiUser::class, get_class($value->getUser()));
+        }
     }
 }
