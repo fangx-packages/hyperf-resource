@@ -15,7 +15,7 @@ namespace Fangx\Resource\Json;
 
 use Countable;
 use Fangx\Resource\Concerns\CollectsResources;
-use Fangx\Resource\Response\PaginatedHttpResponse;
+use Fangx\Resource\Response\PaginatedResponse;
 use Hyperf\Utils\Collection;
 use IteratorAggregate;
 
@@ -70,7 +70,7 @@ class ResourceCollection extends JsonResource implements Countable, IteratorAggr
     public function toResponse()
     {
         if ($this->isPaginatorResource($this->resource)) {
-            return (new PaginatedHttpResponse($this))->toResponse();
+            return (new PaginatedResponse($this))->toResponse();
         }
 
         return parent::toResponse();

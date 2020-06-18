@@ -16,7 +16,7 @@ class HiReplyResource extends GrpcResource
         ];
     }
 
-    public function except(): string
+    public function expect(): string
     {
         return HiReply::class;
     }

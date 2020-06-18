@@ -24,7 +24,7 @@ class GrpcResourceTest extends TestCase
                     public $sex = 1;
                 };
             }
-        })->toResponse();
+        })->toMessage();
 
         $this->assertSame(HiReply::class, get_class($response));
         $this->assertSame(HiUser::class, get_class($response->getUser()));

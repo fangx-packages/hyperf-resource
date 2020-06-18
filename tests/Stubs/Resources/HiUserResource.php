@@ -16,7 +16,7 @@ class HiUserResource extends GrpcResource
         ];
     }
 
-    public function except(): string
+    public function expect(): string
     {
         return HiUser::class;
     }
