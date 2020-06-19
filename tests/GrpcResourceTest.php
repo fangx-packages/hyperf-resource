@@ -41,12 +41,12 @@ class GrpcResourceTest extends TestCase
         $collection = collect([
             new Reply([
                 'message' => 'foo',
-                'user' => new User(['name' => 'nfangxu', 'sex' => 1])
+                'user' => new User(['name' => 'nfangxu', 'sex' => 1]),
             ]),
             new Reply([
                 'message' => 'bar',
-                'user' => new User(['name' => 'nfangxu', 'sex' => 1])
-            ])
+                'user' => new User(['name' => 'nfangxu', 'sex' => 1]),
+            ]),
         ]);
 
         $msg = HiReplyResource::collection($collection)->toMessage();
@@ -65,7 +65,7 @@ class GrpcResourceTest extends TestCase
     {
         $msg = HiReplyResource::make(new Reply([
             'message' => 'foo',
-            'user' => new User(['name' => 'nfangxu', 'sex' => 1])
+            'user' => new User(['name' => 'nfangxu', 'sex' => 1]),
         ]))->toMessage();
 
         $this->assertSame('{"message":"foo","user":{"name":"nfangxu","sex":1}}', $msg->serializeToJsonString());
