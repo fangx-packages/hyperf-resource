@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Fangx\Resource\Response;
 
+use Fangx\Resource\Json\AnonymousResourceCollection;
+use Fangx\Resource\Json\JsonResource;
 use Fangx\Resource\MessageResource;
 use Hyperf\Database\Model\Model;
 use Hyperf\HttpMessage\Stream\SwooleStream;
@@ -52,9 +54,9 @@ class Response
             ))));
     }
 
-    public function toMessage(MessageResource $resource = null)
+    public function toMessage($resource = false)
     {
-        if (is_null($resource)) {
+        if ($resource === false) {
             $resource = $this->resource;
         }
 
@@ -67,12 +69,17 @@ class Response
         $wrap = array_merge_recursive($data, $resource->with(), $resource->additional);
 
         foreach ($wrap as $key => $value) {
+            if (($value instanceof JsonResource && is_null($value->resource)) || is_null($value)) {
+                unset($wrap[$key]);
+                continue;
+            }
+
+            if ($value instanceof AnonymousResourceCollection) {
+                $wrap[$key] = $value->toMessage();
+            }
+
             if ($value instanceof MessageResource) {
-                if (is_null($value->resource)) {
-                    unset($wrap[$key]);
-                } else {
-                    $wrap[$key] = $this->toMessage($value);
-                }
+                $wrap[$key] = $this->toMessage($value);
             }
         }
 
@@ -112,7 +119,7 @@ class Response
      */
     protected function haveDefaultWrapperAndDataIsUnwrapped($data)
     {
-        return $this->wrapper() && ! array_key_exists($this->wrapper(), $data);
+        return $this->wrapper() && !array_key_exists($this->wrapper(), $data);
     }
 
     /**
@@ -125,9 +132,9 @@ class Response
      */
     protected function haveAdditionalInformationAndDataIsUnwrapped($data, $with, $additional)
     {
-        return (! empty($with) || ! empty($additional)) &&
-            (! $this->wrapper() ||
-                ! array_key_exists($this->wrapper(), $data));
+        return (!empty($with) || !empty($additional)) &&
+            (!$this->wrapper() ||
+                !array_key_exists($this->wrapper(), $data));
     }
 
     /**

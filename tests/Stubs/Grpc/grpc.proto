@@ -16,3 +16,9 @@ message HiReply {
     string message = 1;
     HiUser user = 2;
 }
+
+message AllReply
+{
+    string message = 1;
+    repeated HiUser users = 2;
+}

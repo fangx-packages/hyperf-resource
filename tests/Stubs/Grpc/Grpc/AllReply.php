@@ -9,18 +9,18 @@ use Google\Protobuf\Internal\RepeatedField;
 use Google\Protobuf\Internal\GPBUtil;
 
 /**
- * Generated from protobuf message <code>grpc.HiReply</code>
+ * Generated from protobuf message <code>grpc.AllReply</code>
  */
-class HiReply extends \Google\Protobuf\Internal\Message
+class AllReply extends \Google\Protobuf\Internal\Message
 {
     /**
      * Generated from protobuf field <code>string message = 1;</code>
      */
     private $message = '';
     /**
-     * Generated from protobuf field <code>.grpc.HiUser user = 2;</code>
+     * Generated from protobuf field <code>repeated .grpc.HiUser users = 2;</code>
      */
-    private $user = null;
+    private $users;
 
     /**
      * Constructor.
@@ -29,7 +29,7 @@ class HiReply extends \Google\Protobuf\Internal\Message
      *     Optional. Data for populating the Message object.
      *
      *     @type string $message
-     *     @type \Grpc\HiUser $user
+     *     @type \Grpc\HiUser[]|\Google\Protobuf\Internal\RepeatedField $users
      * }
      */
     public function __construct($data = NULL) {
@@ -60,23 +60,23 @@ class HiReply extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>.grpc.HiUser user = 2;</code>
-     * @return \Grpc\HiUser
+     * Generated from protobuf field <code>repeated .grpc.HiUser users = 2;</code>
+     * @return \Google\Protobuf\Internal\RepeatedField
      */
-    public function getUser()
+    public function getUsers()
     {
-        return $this->user;
+        return $this->users;
     }
 
     /**
-     * Generated from protobuf field <code>.grpc.HiUser user = 2;</code>
-     * @param \Grpc\HiUser $var
+     * Generated from protobuf field <code>repeated .grpc.HiUser users = 2;</code>
+     * @param \Grpc\HiUser[]|\Google\Protobuf\Internal\RepeatedField $var
      * @return $this
      */
-    public function setUser($var)
+    public function setUsers($var)
     {
-        GPBUtil::checkMessage($var, \Grpc\HiUser::class);
-        $this->user = $var;
+        $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::MESSAGE, \Grpc\HiUser::class);
+        $this->users = $arr;
 
         return $this;
     }
