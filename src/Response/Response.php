@@ -155,6 +155,6 @@ class Response
 
     protected function response(): ResponseInterface
     {
-        return Context::get(ResponseInterface::class);
+        return Context::set(ResponseInterface::class, $this->resource);
     }
 }
