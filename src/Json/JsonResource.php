@@ -17,12 +17,13 @@ use ArrayAccess;
 use Fangx\Resource\Concerns\ConditionallyLoadsAttributes;
 use Fangx\Resource\Concerns\DelegatesToResource;
 use Fangx\Resource\JsonEncodingException;
+use Fangx\Resource\Resource;
 use Fangx\Resource\Response\Response;
 use Hyperf\Utils\Contracts\Arrayable;
 use Hyperf\Utils\Contracts\Jsonable;
 use JsonSerializable;
 
-class JsonResource implements ArrayAccess, JsonSerializable, Arrayable, Jsonable
+class JsonResource extends Resource implements ArrayAccess, JsonSerializable, Arrayable, Jsonable
 {
     use ConditionallyLoadsAttributes;
     use DelegatesToResource;
@@ -194,11 +195,6 @@ class JsonResource implements ArrayAccess, JsonSerializable, Arrayable, Jsonable
     public function jsonSerialize()
     {
         return $this->resolve();
-    }
-
-    public function toResponse()
-    {
-        return (new Response($this))->toResponse();
     }
 
     public function toMessage()
