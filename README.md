@@ -931,3 +931,5 @@ class IndexController extends AbstractController
 ## 注意
 
 **因 hyperf 原因, 目前无法自动调用 `toResponse()` 方法. 该问题会导致无法添加任何包裹信息到响应JSON中.**
+
+** 2.1 版本可以通过在 `config/dependencies.php` 添加 `\Hyperf\HttpServer\ResponseEmitter::class => \Fangx\Resource\Response\ResponseEmitter::class,` 实现自动调用 `toResponse()` 方法. **
